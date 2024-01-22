@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_toast_catalog/search_box.dart';
 
 import 'constants.dart';
-
 import 'item_manager.dart';
 
 class ItemScreen extends StatefulWidget {
@@ -73,40 +72,44 @@ class _ItemScreenState extends State<ItemScreen> {
       ),
       backgroundColor: appMainColor,
       actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.sort_by_alpha_rounded),
-          onPressed: () {
-            // Show the popup menu when the icon is pressed
-            showMenu(
-              context: context,
-              position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-              items: <PopupMenuEntry<SortOption>>[
-                const PopupMenuItem<SortOption>(
-                  value: SortOption.name,
-                  child: Text('Sort by Name'),
-                ),
-                const PopupMenuItem<SortOption>(
-                  value: SortOption.lastSold,
-                  child: Text('Sort by Last Sold'),
-                ),
-                const PopupMenuItem<SortOption>(
-                  value: SortOption.price,
-                  child: Text('Sort by Price'),
-                ),
-              ],
-            ).then((value) {
-              // Handle the selected sorting option
-              if (value != null) {
-                setState(() {
-                  _sortOption = value;
-                  itemsManager = ItemManager(
-                      sortOption: _sortOption, searchedValue: _searchedValue);
-                });
-              }
-            });
-          },
-        ),
+        buildSortMenuButtons(),
       ],
+    );
+  }
+
+  IconButton buildSortMenuButtons() {
+    return IconButton(
+      icon: const Icon(Icons.sort_by_alpha_rounded),
+      onPressed: () {
+        // Show the popup menu when the icon is pressed
+        showMenu(
+          context: context,
+          position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+          items: <PopupMenuEntry<SortOption>>[
+            const PopupMenuItem<SortOption>(
+              value: SortOption.name,
+              child: Text('Sort by Name'),
+            ),
+            const PopupMenuItem<SortOption>(
+              value: SortOption.lastSold,
+              child: Text('Sort by Last Sold'),
+            ),
+            const PopupMenuItem<SortOption>(
+              value: SortOption.price,
+              child: Text('Sort by Price'),
+            ),
+          ],
+        ).then((value) {
+          // Handle the selected sorting option
+          if (value != null) {
+            setState(() {
+              _sortOption = value;
+              itemsManager = ItemManager(
+                  sortOption: _sortOption, searchedValue: _searchedValue);
+            });
+          }
+        });
+      },
     );
   }
 }
