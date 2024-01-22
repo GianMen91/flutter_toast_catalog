@@ -69,7 +69,6 @@ class _ItemManagerState extends State<ItemManager> {
     });
   }
 
-
   void updateFilteredItems(String type) {
     setState(() {
       _selectedType = type;
@@ -124,7 +123,6 @@ class _ItemManagerState extends State<ItemManager> {
   Future<void> downloadItems() async {
     String url = 'https://mocki.io/v1/fa5a29bd-623f-45d0-b2c9-04410875ca7b';
 
-
     http.Response response;
     try {
       response = await http.get(Uri.parse(url));
@@ -137,7 +135,7 @@ class _ItemManagerState extends State<ItemManager> {
       } else {
         setState(() {
           errorMessage =
-              'Error occurred'; // here, you would actually add more if, else statements to show a better error message
+              'Error occurred';
         });
         throw Exception('Failed to load items from API');
       }
@@ -212,9 +210,9 @@ class _ItemManagerState extends State<ItemManager> {
 
     filteredItems = _searchedValue != ''
         ? filteredItems
-        .where((item) =>
-    item.name.toLowerCase().contains(_searchedValue.toLowerCase()))
-        .toList()
+            .where((item) =>
+                item.name.toLowerCase().contains(_searchedValue.toLowerCase()))
+            .toList()
         : filteredItems;
 
     if (filteredItems.isNotEmpty) {
@@ -246,5 +244,4 @@ class _ItemManagerState extends State<ItemManager> {
       );
     }
   }
-
 }

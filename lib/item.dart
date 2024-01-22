@@ -31,7 +31,7 @@ class Item {
     } else if (value is String) {
       try {
         return double.parse(value);
-      } catch (e) {
+      } on Exception catch (e) {
         if (kDebugMode) {
           print("Error parsing double from string: $e");
         }

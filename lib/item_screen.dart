@@ -18,8 +18,8 @@ class _ItemScreenState extends State<ItemScreen> {
   int selectedIndex = 0;
   SortOption _sortOption = SortOption.name;
   String _searchedValue = '';
-  ItemManager itemsManager = const ItemManager(
-      sortOption: SortOption.name, searchedValue: '');
+  ItemManager itemsManager =
+      const ItemManager(sortOption: SortOption.name, searchedValue: '');
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +33,8 @@ class _ItemScreenState extends State<ItemScreen> {
             SearchBox(onChanged: (value) {
               setState(() {
                 _searchedValue = value;
-                itemsManager = ItemManager(
-                    sortOption: _sortOption,
-                    searchedValue: value);
+                itemsManager =
+                    ItemManager(sortOption: _sortOption, searchedValue: value);
               });
             }),
             const SizedBox(height: defaultPadding / 2),
@@ -59,7 +58,6 @@ class _ItemScreenState extends State<ItemScreen> {
           ],
         ),
       ),
-
     );
   }
 
@@ -96,8 +94,7 @@ class _ItemScreenState extends State<ItemScreen> {
                 setState(() {
                   _sortOption = value;
                   itemsManager = ItemManager(
-                      sortOption: _sortOption,
-                      searchedValue: _searchedValue);
+                      sortOption: _sortOption, searchedValue: _searchedValue);
                 });
               }
             });

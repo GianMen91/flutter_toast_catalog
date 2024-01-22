@@ -9,7 +9,7 @@ class ItemCard extends StatelessWidget {
     Key? key,
     required this.itemIndex,
     required this.item,
-  }) :  super(key: key);
+  }) : super(key: key);
 
   final int itemIndex;
   final Item item;
@@ -21,10 +21,10 @@ class ItemCard extends StatelessWidget {
 
     String formattedLastSold = item.lastSold;
 
-    if(formattedLastSold!=''){
-      formattedLastSold = DateFormat('dd MMMM yyyy').format(DateTime.parse(formattedLastSold));
+    if (formattedLastSold != '') {
+      formattedLastSold =
+          DateFormat('dd MMMM yyyy').format(DateTime.parse(formattedLastSold));
     }
-
 
     var itemName = item.name;
     return Container(
@@ -54,13 +54,12 @@ class ItemCard extends StatelessWidget {
                 ],
               ),
             ),
-
             Positioned(
               bottom: 0,
               left: 0,
               child: SizedBox(
                 height: 140,
-                width: size.width-50,
+                width: size.width - 50,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -69,7 +68,10 @@ class ItemCard extends StatelessWidget {
                           horizontal: defaultPadding, vertical: 10),
                       child: Text(
                         itemName.trim(),
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold,fontFamily: 'OPEN SANS'),
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'OPEN SANS'),
                       ),
                     ),
                     // it use the available space

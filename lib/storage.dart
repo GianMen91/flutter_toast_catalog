@@ -25,7 +25,7 @@ class Storage {
       // Read the file.
       String contents = await file.readAsString();
       return contents;
-    } catch (e) {
+    } on Exception {
       // If encountering an error, return 0.
       return 'no file available';
     }
