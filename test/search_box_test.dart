@@ -49,9 +49,9 @@ void main() {
     );
 
     // Entering text into the search text field
-    await tester.enterText(find.byType(TextField), 'Test Cinnamon');
+    await tester.enterText(find.byType(TextField), 'Test Toast');
 
     // Verifying that the onChanged callback is called with the correct text
-    expect(changedText, 'Test Cinnamon');
+    expect(changedText, 'Test Toast');
   });
 }
