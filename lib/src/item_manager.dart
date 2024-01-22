@@ -10,8 +10,6 @@ import 'package:flutter_toast_catalog/src/data/storage.dart';
 
 import 'data/item.dart';
 
-
-
 // Widget for managing and displaying a list of items
 class ItemManager extends StatefulWidget {
   final SortingOption sortingOption;

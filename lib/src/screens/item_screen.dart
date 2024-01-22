@@ -84,7 +84,9 @@ class _ItemScreenState extends State<ItemScreen> {
   // Build the sorting menu button in the app bar
   IconButton buildSortingMenuButtons() {
     return IconButton(
-      icon: const Icon(Icons.sort_by_alpha_rounded),
+      icon: const Icon(Icons.sort_by_alpha_rounded,
+          key: Key("sort_by_alpha_rounded_icon")
+      ),
       onPressed: () {
         // Show the popup menu when the icon is pressed
         showMenu(
@@ -93,15 +95,22 @@ class _ItemScreenState extends State<ItemScreen> {
           items: <PopupMenuEntry<SortingOption>>[
             const PopupMenuItem<SortingOption>(
               value: SortingOption.name,
-              child: Text('Sort by Name'),
+              child: Text(
+                'Sort by Name',
+                key: Key("sort_by_name_item_menu"),
+              ),
             ),
             const PopupMenuItem<SortingOption>(
               value: SortingOption.lastSold,
               child: Text('Sort by Last Sold'),
+              key: Key("sort_by_last_sold_item_menu"),
             ),
             const PopupMenuItem<SortingOption>(
               value: SortingOption.price,
-              child: Text('Sort by Price'),
+              child: Text(
+                'Sort by Price',
+                key: Key("sort_by_price_item_menu"),
+              ),
             ),
           ],
         ).then((value) {
