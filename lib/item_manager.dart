@@ -26,7 +26,6 @@ class _ItemManagerState extends State<ItemManager> {
   String? errorMessage;
   Storage storage = Storage();
 
-  String _selectedType = 'all';
   SortOption _sortOption = SortOption.name;
   String _searchedValue = '';
 
@@ -66,12 +65,6 @@ class _ItemManagerState extends State<ItemManager> {
             return 0;
         }
       });
-    });
-  }
-
-  void updateFilteredItems(String type) {
-    setState(() {
-      _selectedType = type;
     });
   }
 
@@ -204,9 +197,7 @@ class _ItemManagerState extends State<ItemManager> {
   }
 
   Widget _itemListView(data) {
-    List<Item> filteredItems = _selectedType != 'all'
-        ? data.where((item) => item.type == _selectedType).toList()
-        : List<Item>.from(data);
+    List<Item> filteredItems = List<Item>.from(data);
 
     filteredItems = _searchedValue != ''
         ? filteredItems
