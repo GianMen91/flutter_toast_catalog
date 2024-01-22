@@ -10,6 +10,7 @@ import 'item_card.dart';
 import 'item_screen.dart';
 import 'item.dart';
 
+// Widget for managing and displaying a list of items
 class ItemManager extends StatefulWidget {
   final SortingOption sortingOption;
   final String searchedValue;
@@ -25,9 +26,9 @@ class ItemManager extends StatefulWidget {
 }
 
 class _ItemManagerState extends State<ItemManager> {
-  List<Item>? itemList;
-  String? errorMessage;
-  Storage storage = Storage();
+  List<Item>? itemList; // List of items to display
+  String? errorMessage; // Error message to display if an error occurs
+  Storage storage = Storage(); // Storage utility for reading/writing data
 
   SortingOption _currentSortingOption = SortingOption.name;
   String _currentSearchedValue = '';
@@ -38,6 +39,7 @@ class _ItemManagerState extends State<ItemManager> {
     _initializeState();
   }
 
+  // Initialize the state of the widget
   void _initializeState() {
     _currentSortingOption = widget.sortingOption;
     _currentSearchedValue = widget.searchedValue;
@@ -48,15 +50,18 @@ class _ItemManagerState extends State<ItemManager> {
   void didUpdateWidget(ItemManager oldWidget) {
     super.didUpdateWidget(oldWidget);
 
+    // Update sorting option if it changes
     if (widget.sortingOption != oldWidget.sortingOption) {
       _sortItems(widget.sortingOption);
     }
 
+    // Update searched value if it changes
     if (widget.searchedValue != oldWidget.searchedValue) {
       _updateSearchedValue(widget.searchedValue);
     }
   }
 
+  // Sort the items based on the selected option
   void _sortItems(SortingOption option) {
     setState(() {
       _currentSortingOption = option;
@@ -75,6 +80,7 @@ class _ItemManagerState extends State<ItemManager> {
     });
   }
 
+  // Update the searched value
   void _updateSearchedValue(String value) {
     setState(() {
       _currentSearchedValue = value;
@@ -91,10 +97,12 @@ class _ItemManagerState extends State<ItemManager> {
     );
   }
 
+  // Build a loading indicator widget
   Widget _buildLoadingIndicator() {
     return const Center(child: CircularProgressIndicator());
   }
 
+  // Load items from storage or download from API
   Future<void> _loadItems() async {
     String content = await storage.readFromFile();
     if (content != 'no file available') {
@@ -108,6 +116,7 @@ class _ItemManagerState extends State<ItemManager> {
     }
   }
 
+  // Download items from the API
   Future<void> _downloadItems() async {
     const url = 'https://mocki.io/v1/fa5a29bd-623f-45d0-b2c9-04410875ca7b';
 
@@ -131,6 +140,7 @@ class _ItemManagerState extends State<ItemManager> {
     }
   }
 
+  // Handle errors during item download
   Future<void> _handleError(String message) async {
     setState(() {
       errorMessage = message;
@@ -138,6 +148,7 @@ class _ItemManagerState extends State<ItemManager> {
     throw Exception('Failed to load items from API');
   }
 
+  // Show an error dialog with options for close and retry
   Future<void> _showErrorDialog(
       String title, String content, VoidCallback onRetry) async {
     await showDialog<void>(
@@ -172,6 +183,7 @@ class _ItemManagerState extends State<ItemManager> {
     );
   }
 
+  // Build a styled elevated button for dialogs
   ElevatedButton _buildDialogButton(String label, VoidCallback onPressed) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -187,11 +199,13 @@ class _ItemManagerState extends State<ItemManager> {
     );
   }
 
+  // Convert JSON response to a list of Item objects
   List<Item> _getListFromData(String response) {
     final List<dynamic> responseData = json.decode(response);
     return responseData.map((item) => Item.fromJson(item)).toList();
   }
 
+  // Build a ListView of items based on search and sort criteria
   Widget _itemListView(List<Item> data) {
     List<Item> filteredItems = List<Item>.from(data);
 

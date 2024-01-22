@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 import 'item.dart';
 
+// Represents a card widget for displaying an item
 class ItemCard extends StatelessWidget {
   const ItemCard({
     Key? key,
@@ -10,15 +11,18 @@ class ItemCard extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
-  final int itemIndex;
-  final Item item;
+  final int itemIndex; // Index of the item
+  final Item item; // Item to be displayed on the card
 
   @override
   Widget build(BuildContext context) {
+    // Get the size of the screen
     Size size = MediaQuery.of(context).size;
 
+    // Format the lastSold date of the item
     String formattedLastSold = item.formattedLastSold();
 
+    // Display name of the item
     var itemDisplayName = item.name;
 
     return Container(
@@ -31,6 +35,7 @@ class ItemCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: <Widget>[
+            // Container for the card background with shadow
             Container(
               margin: const EdgeInsets.only(right: 10),
               decoration: BoxDecoration(
@@ -45,6 +50,7 @@ class ItemCard extends StatelessWidget {
                 ],
               ),
             ),
+            // Positioned widget for placing content at the bottom of the card
             Positioned(
               bottom: 0,
               left: 0,
@@ -54,6 +60,7 @@ class ItemCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    // Display item name
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: horizontalPadding,
@@ -67,6 +74,7 @@ class ItemCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // Display lastSold date
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: horizontalPadding,
@@ -77,6 +85,7 @@ class ItemCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
+                    // Display item price
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: horizontalPadding,
