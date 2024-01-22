@@ -7,34 +7,36 @@ import 'package:flutter_toast_catalog/storage.dart';
 
 import 'item_card.dart';
 import 'item_screen.dart';
-import 'item.dart'; // Add this import statement
+import 'item.dart';
 
 class ItemManager extends StatefulWidget {
   final SortingOption sortingOption;
   final String searchedValue;
 
-  const ItemManager(
-      {Key? key, required this.sortingOption, required this.searchedValue})
-      : super(key: key);
+  const ItemManager({
+    Key? key,
+    required this.sortingOption,
+    required this.searchedValue,
+  }) : super(key: key);
 
   @override
   _ItemManagerState createState() => _ItemManagerState();
 }
 
 class _ItemManagerState extends State<ItemManager> {
-  List<Item>? list;
+  List<Item>? itemList;
   String? errorMessage;
   Storage storage = Storage();
 
-  SortingOption _sortOption = SortingOption.name;
-  String _searchedValue = '';
+  SortingOption _currentSortingOption = SortingOption.name;
+  String _currentSearchedValue = '';
 
   @override
   void initState() {
     super.initState();
-    loadItems();
-    _sortOption = widget.sortingOption;
-    _searchedValue = widget.searchedValue;
+    _loadItems();
+    _currentSortingOption = widget.sortingOption;
+    _currentSearchedValue = widget.searchedValue;
   }
 
   @override
@@ -42,18 +44,18 @@ class _ItemManagerState extends State<ItemManager> {
     super.didUpdateWidget(oldWidget);
 
     if (widget.sortingOption != oldWidget.sortingOption) {
-      sortItems(widget.sortingOption);
+      _sortItems(widget.sortingOption);
     }
 
     if (widget.searchedValue != oldWidget.searchedValue) {
-      updateSearchedValue(widget.searchedValue);
+      _updateSearchedValue(widget.searchedValue);
     }
   }
 
-  void sortItems(SortingOption option) {
+  void _sortItems(SortingOption option) {
     setState(() {
-      _sortOption = option;
-      list?.sort((a, b) {
+      _currentSortingOption = option;
+      itemList?.sort((a, b) {
         switch (option) {
           case SortingOption.name:
             return (a.name).compareTo(b.name);
@@ -68,52 +70,53 @@ class _ItemManagerState extends State<ItemManager> {
     });
   }
 
-  void updateSearchedValue(String value) {
+  void _updateSearchedValue(String value) {
     setState(() {
-      _searchedValue = value;
+      _currentSearchedValue = value;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: downloadItems,
-      child: listWidget(),
+      onRefresh: _downloadItems,
+      child: _listWidget(),
     );
   }
 
-  Widget listWidget() {
-    if (list != null) {
-      return _itemListView(list!); // Return a ListView
+  Widget _listWidget() {
+    if (itemList != null) {
+      return _itemListView(itemList!);
     } else {
       return const Center(
-          child: CircularProgressIndicator()); // Return a Center widget
+        child: CircularProgressIndicator(),
+      );
     }
   }
 
-  RefreshIndicator showNoData() {
+  RefreshIndicator _showNoData() {
     return RefreshIndicator(
-      onRefresh: downloadItems,
+      onRefresh: _downloadItems,
       child: const Center(),
     );
   }
 
-  Future<void> loadItems() async {
+  Future<void> _loadItems() async {
     String content = await storage.readList();
 
     if (content != 'no file available') {
-      list = getListFromData(content);
+      itemList = _getListFromData(content);
     }
 
-    if ((list != null) && (list!.isNotEmpty)) {
+    if ((itemList != null) && (itemList!.isNotEmpty)) {
       errorMessage = null;
       setState(() {});
     } else {
-      await downloadItems();
+      await _downloadItems();
     }
   }
 
-  Future<void> downloadItems() async {
+  Future<void> _downloadItems() async {
     String url = 'https://mocki.io/v1/fa5a29bd-623f-45d0-b2c9-04410875ca7b';
 
     http.Response response;
@@ -121,14 +124,13 @@ class _ItemManagerState extends State<ItemManager> {
       response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         String responseResult = response.body;
-        list = getListFromData(responseResult);
+        itemList = _getListFromData(responseResult);
         storage.writeList(response.body);
         errorMessage = null;
         setState(() {});
       } else {
         setState(() {
-          errorMessage =
-              'Error occurred';
+          errorMessage = 'Error occurred';
         });
         throw Exception('Failed to load items from API');
       }
@@ -140,15 +142,17 @@ class _ItemManagerState extends State<ItemManager> {
   Future<void> _showMyDialog() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Error',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 20,
-                color: Color(0xFF1468b3),
-              )),
+          title: const Text(
+            'Error',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 20,
+              color: Color(0xFF1468b3),
+            ),
+          ),
           content: SingleChildScrollView(
             child: ListBody(
               children: const <Widget>[
@@ -181,7 +185,7 @@ class _ItemManagerState extends State<ItemManager> {
               ),
               onPressed: () {
                 Navigator.pop(context);
-                downloadItems();
+                _downloadItems();
               },
               child: const Text("Retry", style: TextStyle(fontSize: 15)),
             ),
@@ -191,7 +195,7 @@ class _ItemManagerState extends State<ItemManager> {
     );
   }
 
-  List<Item> getListFromData(String response) {
+  List<Item> _getListFromData(String response) {
     final List<dynamic> responseData = json.decode(response);
     return responseData.map((item) => Item.fromJson(item)).toList();
   }
@@ -199,16 +203,17 @@ class _ItemManagerState extends State<ItemManager> {
   Widget _itemListView(data) {
     List<Item> filteredItems = List<Item>.from(data);
 
-    filteredItems = _searchedValue != ''
+    filteredItems = _currentSearchedValue != ''
         ? filteredItems
-            .where((item) =>
-                item.name.toLowerCase().contains(_searchedValue.toLowerCase()))
+            .where((item) => item.name
+                .toLowerCase()
+                .contains(_currentSearchedValue.toLowerCase()))
             .toList()
         : filteredItems;
 
     if (filteredItems.isNotEmpty) {
       filteredItems.sort((a, b) {
-        switch (_sortOption) {
+        switch (_currentSortingOption) {
           case SortingOption.name:
             return (a.name.trim()).compareTo(b.name.trim());
           case SortingOption.lastSold:
