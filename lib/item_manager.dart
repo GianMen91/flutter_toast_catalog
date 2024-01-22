@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_toast_catalog/storage.dart';
@@ -34,9 +35,13 @@ class _ItemManagerState extends State<ItemManager> {
   @override
   void initState() {
     super.initState();
-    _loadItems();
+    _initializeState();
+  }
+
+  void _initializeState() {
     _currentSortingOption = widget.sortingOption;
     _currentSearchedValue = widget.searchedValue;
+    _loadItems();
   }
 
   @override
@@ -58,11 +63,11 @@ class _ItemManagerState extends State<ItemManager> {
       itemList?.sort((a, b) {
         switch (option) {
           case SortingOption.name:
-            return (a.name).compareTo(b.name);
+            return a.name.compareTo(b.name);
           case SortingOption.lastSold:
-            return (a.lastSold).compareTo(b.lastSold);
+            return a.lastSold.compareTo(b.lastSold);
           case SortingOption.price:
-            return (a.price).compareTo(b.price);
+            return a.price.compareTo(b.price);
           default:
             return 0;
         }
@@ -80,74 +85,69 @@ class _ItemManagerState extends State<ItemManager> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: _downloadItems,
-      child: _listWidget(),
+      child: itemList != null
+          ? _itemListView(itemList!)
+          : _buildLoadingIndicator(),
     );
   }
 
-  Widget _listWidget() {
-    if (itemList != null) {
-      return _itemListView(itemList!);
-    } else {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-  }
-
-  RefreshIndicator _showNoData() {
-    return RefreshIndicator(
-      onRefresh: _downloadItems,
-      child: const Center(),
-    );
+  Widget _buildLoadingIndicator() {
+    return const Center(child: CircularProgressIndicator());
   }
 
   Future<void> _loadItems() async {
     String content = await storage.readList();
-
     if (content != 'no file available') {
       itemList = _getListFromData(content);
     }
 
-    if ((itemList != null) && (itemList!.isNotEmpty)) {
-      errorMessage = null;
-      setState(() {});
-    } else {
+    if (itemList == null || itemList!.isEmpty) {
       await _downloadItems();
+    } else {
+      setState(() {});
     }
   }
 
   Future<void> _downloadItems() async {
-    String url = 'https://mocki.io/v1/fa5a29bd-623f-45d0-b2c9-04410875ca7b';
+    const url = 'https://mocki.io/v1/fa5a29bd-623f-45d0-b2c9-04410875ca7b';
 
-    http.Response response;
     try {
-      response = await http.get(Uri.parse(url));
+      http.Response response = await http.get(Uri.parse(url));
+
       if (response.statusCode == 200) {
         String responseResult = response.body;
         itemList = _getListFromData(responseResult);
         storage.writeList(response.body);
-        errorMessage = null;
         setState(() {});
       } else {
-        setState(() {
-          errorMessage = 'Error occurred';
-        });
-        throw Exception('Failed to load items from API');
+        _handleError('Error occurred');
       }
     } on SocketException {
-      _showMyDialog();
+      _showErrorDialog(
+        'Error',
+        'Impossible to download the items from the server.\nCheck your internet connection and retry!',
+        _downloadItems,
+      );
     }
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
+  Future<void> _handleError(String message) async {
+    setState(() {
+      errorMessage = message;
+    });
+    throw Exception('Failed to load items from API');
+  }
+
+  Future<void> _showErrorDialog(
+      String title, String content, VoidCallback onRetry) async {
+    await showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Error',
-            style: TextStyle(
+          title: Text(
+            title,
+            style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 20,
               color: Color(0xFF1468b3),
@@ -155,43 +155,35 @@ class _ItemManagerState extends State<ItemManager> {
           ),
           content: SingleChildScrollView(
             child: ListBody(
-              children: const <Widget>[
-                Text('Impossible to download the items from the server.'),
-                Text('Check your internet connection and retry!'),
+              children: <Widget>[
+                Text(content),
               ],
             ),
           ),
           actions: <Widget>[
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                padding: const EdgeInsets.all(12.0),
-                primary: const Color(0xFF1468b3),
-                onPrimary: Colors.white,
-              ),
-              onPressed: () => Navigator.pop(context),
-              child: const Text("Close", style: TextStyle(fontSize: 15)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                padding: const EdgeInsets.all(12.0),
-                primary: const Color(0xFF1468b3),
-                onPrimary: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.pop(context);
-                _downloadItems();
-              },
-              child: const Text("Retry", style: TextStyle(fontSize: 15)),
-            ),
+            _buildDialogButton('Close', () => Navigator.pop(context)),
+            _buildDialogButton('Retry', () {
+              Navigator.pop(context);
+              onRetry();
+            }),
           ],
         );
       },
+    );
+  }
+
+  ElevatedButton _buildDialogButton(String label, VoidCallback onPressed) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        padding: const EdgeInsets.all(12.0),
+        primary: const Color(0xFF1468b3),
+        onPrimary: Colors.white,
+      ),
+      onPressed: onPressed,
+      child: Text(label, style: const TextStyle(fontSize: 15)),
     );
   }
 
@@ -200,7 +192,7 @@ class _ItemManagerState extends State<ItemManager> {
     return responseData.map((item) => Item.fromJson(item)).toList();
   }
 
-  Widget _itemListView(data) {
+  Widget _itemListView(List<Item> data) {
     List<Item> filteredItems = List<Item>.from(data);
 
     filteredItems = _currentSearchedValue != ''
@@ -212,18 +204,7 @@ class _ItemManagerState extends State<ItemManager> {
         : filteredItems;
 
     if (filteredItems.isNotEmpty) {
-      filteredItems.sort((a, b) {
-        switch (_currentSortingOption) {
-          case SortingOption.name:
-            return (a.name.trim()).compareTo(b.name.trim());
-          case SortingOption.lastSold:
-            return (a.lastSold).compareTo(b.lastSold);
-          case SortingOption.price:
-            return (a.price).compareTo(b.price);
-          default:
-            return 0;
-        }
-      });
+      _sortItems(_currentSortingOption);
       return ListView.builder(
         itemCount: filteredItems.length,
         itemBuilder: (context, index) => ItemCard(
