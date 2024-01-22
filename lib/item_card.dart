@@ -19,7 +19,7 @@ class ItemCard extends StatelessWidget {
     // It  will provide us total height and width of our screen
     Size size = MediaQuery.of(context).size;
 
-    String formattedLastSold = item.lastSold;
+    String formattedLastSold = item.lastSold.toString();
 
     if (formattedLastSold != '') {
       formattedLastSold =
