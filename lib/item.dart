@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class Item {
   final int id;
   final String name;
@@ -30,7 +32,9 @@ class Item {
       try {
         return double.parse(value);
       } catch (e) {
-        print("Error parsing double from string: $e");
+        if (kDebugMode) {
+          print("Error parsing double from string: $e");
+        }
       }
     }
     return 0.0; // Default value if parsing fails

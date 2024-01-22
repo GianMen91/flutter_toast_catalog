@@ -17,10 +17,9 @@ enum SortOption { name, lastSold, price }
 class _ItemScreenState extends State<ItemScreen> {
   int selectedIndex = 0;
   SortOption _sortOption = SortOption.name;
-  String _selectedType = 'all';
   String _searchedValue = '';
-  ItemManager eventsManager = const ItemManager(
-      selectedType: 'all', sortOption: SortOption.name, searchedValue: '');
+  ItemManager itemsManager = const ItemManager(
+      sortOption: SortOption.name, searchedValue: '');
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +33,7 @@ class _ItemScreenState extends State<ItemScreen> {
             SearchBox(onChanged: (value) {
               setState(() {
                 _searchedValue = value;
-                eventsManager = ItemManager(
-                    selectedType: _selectedType,
+                itemsManager = ItemManager(
                     sortOption: _sortOption,
                     searchedValue: value);
               });
@@ -54,7 +52,7 @@ class _ItemScreenState extends State<ItemScreen> {
                       ),
                     ),
                   ),
-                  eventsManager,
+                  itemsManager,
                 ],
               ),
             ),
@@ -97,8 +95,7 @@ class _ItemScreenState extends State<ItemScreen> {
               if (value != null) {
                 setState(() {
                   _sortOption = value;
-                  eventsManager = ItemManager(
-                      selectedType: _selectedType,
+                  itemsManager = ItemManager(
                       sortOption: _sortOption,
                       searchedValue: _searchedValue);
                 });
@@ -108,28 +105,5 @@ class _ItemScreenState extends State<ItemScreen> {
         ),
       ],
     );
-  }
-
-  String getEventTypeTitle(String type) {
-    switch (type) {
-      case 'all':
-        return 'All';
-      case 'training':
-        return 'Training event';
-      case 'nwm':
-        return 'Network meeting';
-      case 'conference':
-        return 'Conference';
-      case 'cultural':
-        return 'Cultural event';
-      case 'statutory':
-        return 'Statutory';
-      case 'summer':
-        return 'Summer University';
-      case 'online':
-        return 'Online event';
-      default:
-        return type;
-    }
   }
 }

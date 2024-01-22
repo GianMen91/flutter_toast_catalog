@@ -1,7 +1,7 @@
 // Importing necessary packages and files
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:toast_catalog_flutter/search_box.dart';
+import 'package:flutter_toast_catalog/search_box.dart';
 
 // The main entry point for the test suite
 void main() {

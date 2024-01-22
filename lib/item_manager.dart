@@ -10,12 +10,11 @@ import 'item_screen.dart';
 import 'item.dart'; // Add this import statement
 
 class ItemManager extends StatefulWidget {
-  final String selectedType;
   final SortOption sortOption;
   final String searchedValue;
 
   const ItemManager(
-      {Key? key, required this.selectedType, required this.sortOption, required this.searchedValue})
+      {Key? key, required this.sortOption, required this.searchedValue})
       : super(key: key);
 
   @override
@@ -34,8 +33,7 @@ class _ItemManagerState extends State<ItemManager> {
   @override
   void initState() {
     super.initState();
-    loadEvents();
-    _selectedType = widget.selectedType;
+    loadItems();
     _sortOption = widget.sortOption;
     _searchedValue = widget.searchedValue;
   }
@@ -43,11 +41,9 @@ class _ItemManagerState extends State<ItemManager> {
   @override
   void didUpdateWidget(ItemManager oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedType != oldWidget.selectedType) {
-      updateFilteredEvents(widget.selectedType);
-    }
+
     if (widget.sortOption != oldWidget.sortOption) {
-      sortEvents(widget.sortOption);
+      sortItems(widget.sortOption);
     }
 
     if (widget.searchedValue != oldWidget.searchedValue) {
@@ -55,17 +51,17 @@ class _ItemManagerState extends State<ItemManager> {
     }
   }
 
-  void sortEvents(SortOption option) {
+  void sortItems(SortOption option) {
     setState(() {
       _sortOption = option;
       list?.sort((a, b) {
         switch (option) {
           case SortOption.name:
-            return (a.name ?? "").compareTo(b.name ?? "");
+            return (a.name).compareTo(b.name);
           case SortOption.lastSold:
-            return (a.lastSold ?? "").compareTo(b.lastSold ?? "");
+            return (a.lastSold).compareTo(b.lastSold);
           case SortOption.price:
-            return (a.price ?? 0).compareTo(b.price ?? 0);
+            return (a.price).compareTo(b.price);
           default:
             return 0;
         }
@@ -74,7 +70,7 @@ class _ItemManagerState extends State<ItemManager> {
   }
 
 
-  void updateFilteredEvents(String type) {
+  void updateFilteredItems(String type) {
     setState(() {
       _selectedType = type;
     });
@@ -89,14 +85,14 @@ class _ItemManagerState extends State<ItemManager> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: downloadEvents,
+      onRefresh: downloadItems,
       child: listWidget(),
     );
   }
 
   Widget listWidget() {
     if (list != null) {
-      return _eventsListView(list!); // Return a ListView
+      return _itemListView(list!); // Return a ListView
     } else {
       return const Center(
           child: CircularProgressIndicator()); // Return a Center widget
@@ -105,12 +101,12 @@ class _ItemManagerState extends State<ItemManager> {
 
   RefreshIndicator showNoData() {
     return RefreshIndicator(
-      onRefresh: downloadEvents,
+      onRefresh: downloadItems,
       child: const Center(),
     );
   }
 
-  Future<void> loadEvents() async {
+  Future<void> loadItems() async {
     String content = await storage.readList();
 
     if (content != 'no file available') {
@@ -121,11 +117,11 @@ class _ItemManagerState extends State<ItemManager> {
       errorMessage = null;
       setState(() {});
     } else {
-      await downloadEvents();
+      await downloadItems();
     }
   }
 
-  Future<void> downloadEvents() async {
+  Future<void> downloadItems() async {
     String url = 'https://mocki.io/v1/fa5a29bd-623f-45d0-b2c9-04410875ca7b';
 
 
@@ -143,7 +139,7 @@ class _ItemManagerState extends State<ItemManager> {
           errorMessage =
               'Error occurred'; // here, you would actually add more if, else statements to show a better error message
         });
-        throw Exception('Failed to load events from API');
+        throw Exception('Failed to load items from API');
       }
     } on SocketException {
       _showMyDialog();
@@ -165,7 +161,7 @@ class _ItemManagerState extends State<ItemManager> {
           content: SingleChildScrollView(
             child: ListBody(
               children: const <Widget>[
-                Text('Impossible to download the events from the server.'),
+                Text('Impossible to download the items from the server.'),
                 Text('Check your internet connection and retry!'),
               ],
             ),
@@ -194,7 +190,7 @@ class _ItemManagerState extends State<ItemManager> {
               ),
               onPressed: () {
                 Navigator.pop(context);
-                downloadEvents();
+                downloadItems();
               },
               child: const Text("Retry", style: TextStyle(fontSize: 15)),
             ),
@@ -209,44 +205,43 @@ class _ItemManagerState extends State<ItemManager> {
     return responseData.map((item) => Item.fromJson(item)).toList();
   }
 
-  Widget _eventsListView(data) {
-    List<Item> filteredEvents = _selectedType != 'all'
-        ? data.where((event) => event.type == _selectedType).toList()
+  Widget _itemListView(data) {
+    List<Item> filteredItems = _selectedType != 'all'
+        ? data.where((item) => item.type == _selectedType).toList()
         : List<Item>.from(data);
 
-    filteredEvents = _searchedValue != ''
-        ? filteredEvents
-        .where((event) =>
-    event.name?.toLowerCase().contains(_searchedValue.toLowerCase()) ??
-        false)
+    filteredItems = _searchedValue != ''
+        ? filteredItems
+        .where((item) =>
+    item.name.toLowerCase().contains(_searchedValue.toLowerCase()))
         .toList()
-        : filteredEvents;
+        : filteredItems;
 
-    if (filteredEvents.isNotEmpty) {
-      filteredEvents.sort((a, b) {
+    if (filteredItems.isNotEmpty) {
+      filteredItems.sort((a, b) {
         switch (_sortOption) {
           case SortOption.name:
-            return (a.name?.trim() ?? "").compareTo(b.name?.trim() ?? "");
+            return (a.name.trim()).compareTo(b.name.trim());
           case SortOption.lastSold:
-            return (a.lastSold ?? "").compareTo(b.lastSold ?? "");
+            return (a.lastSold).compareTo(b.lastSold);
           case SortOption.price:
-            return (a.price ?? 0).compareTo(b.price ?? 0);
+            return (a.price).compareTo(b.price);
           default:
             return 0;
         }
       });
       return ListView.builder(
-        itemCount: filteredEvents.length,
+        itemCount: filteredItems.length,
         itemBuilder: (context, index) => ItemCard(
           itemIndex: index,
-          item: filteredEvents[index],
+          item: filteredItems[index],
         ),
       );
     } else {
       return const Align(
         alignment: Alignment.center,
         child: Text(
-          "No Events Found",
+          "No Items Found",
           style: TextStyle(fontSize: 16),
         ),
       );

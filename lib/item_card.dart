@@ -19,14 +19,14 @@ class ItemCard extends StatelessWidget {
     // It  will provide us total height and width of our screen
     Size size = MediaQuery.of(context).size;
 
-    String formattedLastSold = item.lastSold ?? '';
+    String formattedLastSold = item.lastSold;
 
     if(formattedLastSold!=''){
       formattedLastSold = DateFormat('dd MMMM yyyy').format(DateTime.parse(formattedLastSold));
     }
 
 
-    var eventName = item.name ?? '';
+    var itemName = item.name;
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: defaultPadding,
@@ -69,7 +69,7 @@ class ItemCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: defaultPadding, vertical: 10),
                       child: Text(
-                        eventName.trim(),
+                        itemName.trim(),
                         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold,fontFamily: 'OPEN SANS'),
                       ),
                     ),
@@ -86,7 +86,7 @@ class ItemCard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: defaultPadding, vertical: 10),
                       child: Text(
-                        "Price: €${item.price ?? ''}",
+                        "Price: €${item.price}",
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
