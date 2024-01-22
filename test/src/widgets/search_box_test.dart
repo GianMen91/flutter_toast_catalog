@@ -1,8 +1,7 @@
 // Importing necessary packages and files
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_toast_catalog/widgets/search_box.dart';
-
+import 'package:flutter_toast_catalog/src/widgets/search_box.dart';
 // The main entry point for the test suite
 void main() {
   // Test to check if the SearchBox widget renders correctly
