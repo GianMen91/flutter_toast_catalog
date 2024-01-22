@@ -96,7 +96,7 @@ class _ItemManagerState extends State<ItemManager> {
   }
 
   Future<void> _loadItems() async {
-    String content = await storage.readList();
+    String content = await storage.readFromFile();
     if (content != 'no file available') {
       itemList = _getListFromData(content);
     }
@@ -117,7 +117,7 @@ class _ItemManagerState extends State<ItemManager> {
       if (response.statusCode == 200) {
         String responseResult = response.body;
         itemList = _getListFromData(responseResult);
-        storage.writeList(response.body);
+        storage.writeToFile(response.body);
         setState(() {});
       } else {
         _handleError('Error occurred');

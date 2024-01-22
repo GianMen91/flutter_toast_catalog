@@ -12,21 +12,18 @@ class Storage {
     return File('$path/counter.txt');
   }
 
-  Future<File> writeList(String factList) async {
+  Future<File> writeToFile(String content) async {
     final file = await _localFile;
 
-    // Write the file.
-    return file.writeAsString(factList);
+    return file.writeAsString(content);
   }
 
-  Future<String> readList() async {
+  Future<String> readFromFile() async {
     try {
       final file = await _localFile;
-      // Read the file.
-      String contents = await file.readAsString();
-      return contents;
-    } on Exception {
-      // If encountering an error, return 0.
+      return await file.readAsString();
+    } on FileSystemException catch (e) {
+      print("Error reading file: $e");
       return 'no file available';
     }
   }

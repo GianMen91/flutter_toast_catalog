@@ -16,21 +16,16 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // It  will provide us total height and width of our screen
     Size size = MediaQuery.of(context).size;
 
-    String formattedLastSold = item.lastSold.toString();
+    String formattedLastSold = item.formattedLastSold();
 
-    if (formattedLastSold != '') {
-      formattedLastSold =
-          DateFormat('dd MMMM yyyy').format(DateTime.parse(formattedLastSold));
-    }
+    var itemDisplayName = item.name;
 
-    var itemName = item.name;
     return Container(
       margin: const EdgeInsets.symmetric(
-        horizontal: defaultPadding,
-        vertical: defaultPadding / 2,
+        horizontal: horizontalPadding,
+        vertical: verticalPadding,
       ),
       height: 150,
       child: InkWell(
@@ -46,10 +41,7 @@ class ItemCard extends StatelessWidget {
                   BoxShadow(
                     color: Colors.grey.withOpacity(.5),
                     blurRadius: 20.0, // soften the shadow
-                    offset: const Offset(
-                      5.0,
-                      5.0,
-                    ),
+                    offset: const Offset(5.0, 5.0),
                   )
                 ],
               ),
@@ -65,29 +57,34 @@ class ItemCard extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: defaultPadding, vertical: 10),
+                        horizontal: horizontalPadding,
+                        vertical: verticalPadding,
+                      ),
                       child: Text(
-                        itemName.trim(),
+                        itemDisplayName.trim(),
                         style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'OPEN SANS'),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                    // it use the available space
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: defaultPadding, vertical: 10),
+                        horizontal: horizontalPadding,
+                        vertical: verticalPadding,
+                      ),
                       child: Text(
-                        "Starts: $formattedLastSold",
+                        "Last Sold: $formattedLastSold",
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: defaultPadding, vertical: 10),
+                        horizontal: horizontalPadding,
+                        vertical: verticalPadding,
+                      ),
                       child: Text(
-                        "Price: €${item.price}",
+                        "Price: ${item.price} €",
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class Item {
   final int id;
@@ -59,5 +60,9 @@ class Item {
       }
     }
     return DateTime.now(); // Default value if parsing fails or not provided
+  }
+
+  String formattedLastSold() {
+      return DateFormat('dd MMMM yyyy').format(lastSold);
   }
 }
