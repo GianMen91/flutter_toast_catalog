@@ -64,7 +64,13 @@ class _ItemScreenState extends State<ItemScreen> {
   AppBar buildAppBar() {
     return AppBar(
       elevation: 0,
-      title: const Text('Toast Catalog'),
+      title: const Text(
+        'Toast Catalog',
+        style: const TextStyle(
+          fontFamily: 'Niconne',
+          fontSize: 32,
+        ),
+      ),
       backgroundColor: appMainColor,
       actions: <Widget>[
         IconButton(
