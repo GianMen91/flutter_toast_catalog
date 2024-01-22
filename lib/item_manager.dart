@@ -10,11 +10,11 @@ import 'item_screen.dart';
 import 'item.dart'; // Add this import statement
 
 class ItemManager extends StatefulWidget {
-  final SortOption sortOption;
+  final SortingOption sortingOption;
   final String searchedValue;
 
   const ItemManager(
-      {Key? key, required this.sortOption, required this.searchedValue})
+      {Key? key, required this.sortingOption, required this.searchedValue})
       : super(key: key);
 
   @override
@@ -26,14 +26,14 @@ class _ItemManagerState extends State<ItemManager> {
   String? errorMessage;
   Storage storage = Storage();
 
-  SortOption _sortOption = SortOption.name;
+  SortingOption _sortOption = SortingOption.name;
   String _searchedValue = '';
 
   @override
   void initState() {
     super.initState();
     loadItems();
-    _sortOption = widget.sortOption;
+    _sortOption = widget.sortingOption;
     _searchedValue = widget.searchedValue;
   }
 
@@ -41,8 +41,8 @@ class _ItemManagerState extends State<ItemManager> {
   void didUpdateWidget(ItemManager oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (widget.sortOption != oldWidget.sortOption) {
-      sortItems(widget.sortOption);
+    if (widget.sortingOption != oldWidget.sortingOption) {
+      sortItems(widget.sortingOption);
     }
 
     if (widget.searchedValue != oldWidget.searchedValue) {
@@ -50,16 +50,16 @@ class _ItemManagerState extends State<ItemManager> {
     }
   }
 
-  void sortItems(SortOption option) {
+  void sortItems(SortingOption option) {
     setState(() {
       _sortOption = option;
       list?.sort((a, b) {
         switch (option) {
-          case SortOption.name:
+          case SortingOption.name:
             return (a.name).compareTo(b.name);
-          case SortOption.lastSold:
+          case SortingOption.lastSold:
             return (a.lastSold).compareTo(b.lastSold);
-          case SortOption.price:
+          case SortingOption.price:
             return (a.price).compareTo(b.price);
           default:
             return 0;
@@ -209,11 +209,11 @@ class _ItemManagerState extends State<ItemManager> {
     if (filteredItems.isNotEmpty) {
       filteredItems.sort((a, b) {
         switch (_sortOption) {
-          case SortOption.name:
+          case SortingOption.name:
             return (a.name.trim()).compareTo(b.name.trim());
-          case SortOption.lastSold:
+          case SortingOption.lastSold:
             return (a.lastSold).compareTo(b.lastSold);
-          case SortOption.price:
+          case SortingOption.price:
             return (a.price).compareTo(b.price);
           default:
             return 0;

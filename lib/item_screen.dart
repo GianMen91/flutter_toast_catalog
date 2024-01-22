@@ -11,14 +11,14 @@ class ItemScreen extends StatefulWidget {
   State<ItemScreen> createState() => _ItemScreenState();
 }
 
-enum SortOption { name, lastSold, price }
+enum SortingOption { name, lastSold, price }
 
 class _ItemScreenState extends State<ItemScreen> {
   int selectedIndex = 0;
-  SortOption _sortOption = SortOption.name;
+  SortingOption _sortOption = SortingOption.name;
   String _searchedValue = '';
-  ItemManager itemsManager =
-      const ItemManager(sortOption: SortOption.name, searchedValue: '');
+  ItemManager itemManager =
+      const ItemManager(sortingOption: SortingOption.name, searchedValue: '');
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class _ItemScreenState extends State<ItemScreen> {
             SearchBox(onChanged: (value) {
               setState(() {
                 _searchedValue = value;
-                itemsManager =
-                    ItemManager(sortOption: _sortOption, searchedValue: value);
+                itemManager =
+                    ItemManager(sortingOption: _sortOption, searchedValue: value);
               });
             }),
             const SizedBox(height: defaultPadding / 2),
@@ -50,7 +50,7 @@ class _ItemScreenState extends State<ItemScreen> {
                       ),
                     ),
                   ),
-                  itemsManager,
+                  itemManager,
                 ],
               ),
             ),
@@ -72,12 +72,12 @@ class _ItemScreenState extends State<ItemScreen> {
       ),
       backgroundColor: appMainColor,
       actions: <Widget>[
-        buildSortMenuButtons(),
+        buildSortingMenuButtons(),
       ],
     );
   }
 
-  IconButton buildSortMenuButtons() {
+  IconButton buildSortingMenuButtons() {
     return IconButton(
       icon: const Icon(Icons.sort_by_alpha_rounded),
       onPressed: () {
@@ -85,17 +85,17 @@ class _ItemScreenState extends State<ItemScreen> {
         showMenu(
           context: context,
           position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-          items: <PopupMenuEntry<SortOption>>[
-            const PopupMenuItem<SortOption>(
-              value: SortOption.name,
+          items: <PopupMenuEntry<SortingOption>>[
+            const PopupMenuItem<SortingOption>(
+              value: SortingOption.name,
               child: Text('Sort by Name'),
             ),
-            const PopupMenuItem<SortOption>(
-              value: SortOption.lastSold,
+            const PopupMenuItem<SortingOption>(
+              value: SortingOption.lastSold,
               child: Text('Sort by Last Sold'),
             ),
-            const PopupMenuItem<SortOption>(
-              value: SortOption.price,
+            const PopupMenuItem<SortingOption>(
+              value: SortingOption.price,
               child: Text('Sort by Price'),
             ),
           ],
@@ -104,8 +104,8 @@ class _ItemScreenState extends State<ItemScreen> {
           if (value != null) {
             setState(() {
               _sortOption = value;
-              itemsManager = ItemManager(
-                  sortOption: _sortOption, searchedValue: _searchedValue);
+              itemManager = ItemManager(
+                  sortingOption: _sortOption, searchedValue: _searchedValue);
             });
           }
         });
