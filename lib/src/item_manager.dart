@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_toast_catalog/src/screens/item_screen.dart';
+import 'package:flutter_toast_catalog/src/widgets/item_card.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_toast_catalog/data/storage.dart';
+import 'package:flutter_toast_catalog/src/data/storage.dart';
 
-import '../widgets/item_card.dart';
-import '../screens/item_screen.dart';
-import '../data/item.dart';
+import 'data/item.dart';
+
+
 
 // Widget for managing and displaying a list of items
 class ItemManager extends StatefulWidget {
