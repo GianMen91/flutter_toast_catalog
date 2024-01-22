@@ -32,7 +32,7 @@ class ItemCard extends StatelessWidget {
         horizontal: defaultPadding,
         vertical: defaultPadding / 2,
       ),
-      height: 200,
+      height: 150,
       child: InkWell(
         child: Stack(
           alignment: Alignment.bottomCenter,
@@ -60,7 +60,7 @@ class ItemCard extends StatelessWidget {
               bottom: 0,
               left: 0,
               child: SizedBox(
-                height: 180,
+                height: 140,
                 width: size.width-50,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -68,7 +68,6 @@ class _ItemScreenState extends State<ItemScreen> {
   AppBar buildAppBar() {
     return AppBar(
       elevation: 0,
-      centerTitle: false,
       title: const Text('Toast Catalog'),
       backgroundColor: appMainColor,
       actions: <Widget>[
