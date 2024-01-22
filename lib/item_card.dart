@@ -46,7 +46,6 @@ class ItemCard extends StatelessWidget {
                   BoxShadow(
                     color: Colors.grey.withOpacity(.5),
                     blurRadius: 20.0, // soften the shadow
-                    spreadRadius: 0.0, //extend the shadow
                     offset: const Offset(
                       5.0,
                       5.0,

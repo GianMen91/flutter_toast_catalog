@@ -239,7 +239,6 @@ class _ItemManagerState extends State<ItemManager> {
       );
     } else {
       return const Align(
-        alignment: Alignment.center,
         child: Text(
           "No Items Found",
           style: TextStyle(fontSize: 16),

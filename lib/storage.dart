@@ -16,7 +16,7 @@ class Storage {
     final file = await _localFile;
 
     // Write the file.
-    return file.writeAsString('$factList');
+    return file.writeAsString(factList);
   }
 
   Future<String> readList() async {
