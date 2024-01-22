@@ -22,8 +22,7 @@ class Storage {
     try {
       final file = await _localFile;
       return await file.readAsString();
-    } on FileSystemException catch (e) {
-      print("Error reading file: $e");
+    } on FileSystemException {
       return 'no file available';
     }
   }
