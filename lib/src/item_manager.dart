@@ -90,6 +90,7 @@ class _ItemManagerState extends State<ItemManager> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
+      key: Key('itemManagerRefreshIndicator'),
       onRefresh: _downloadItems,
       child: itemList != null
           ? _itemListView(itemList!)
@@ -99,7 +100,9 @@ class _ItemManagerState extends State<ItemManager> {
 
   // Build a loading indicator widget
   Widget _buildLoadingIndicator() {
-    return const Center(child: CircularProgressIndicator());
+    return const Center(
+        key: Key('loadingIndicatorCenter'), // Added key
+        child: CircularProgressIndicator());
   }
 
   // Load items from storage or download from API
