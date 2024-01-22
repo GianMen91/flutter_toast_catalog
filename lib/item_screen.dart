@@ -66,7 +66,7 @@ class _ItemScreenState extends State<ItemScreen> {
       elevation: 0,
       title: const Text(
         'Toast Catalog',
-        style: const TextStyle(
+        style: TextStyle(
           fontFamily: 'Niconne',
           fontSize: 32,
         ),
