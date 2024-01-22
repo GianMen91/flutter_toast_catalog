@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_toast_catalog/search_box.dart';
+import 'package:flutter_toast_catalog/widgets/search_box.dart';
 
-import 'constants.dart';
-import 'item_manager.dart';
+import '../constants/constants.dart';
+import '../managers/item_manager.dart';
 
 // Screen for displaying a list of items
 class ItemScreen extends StatefulWidget {

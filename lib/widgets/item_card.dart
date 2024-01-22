@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'constants.dart';
-import 'item.dart';
+import '../constants/constants.dart';
+import '../data/item.dart';
 
 // Represents a card widget for displaying an item
 class ItemCard extends StatelessWidget {

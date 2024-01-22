@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
-import 'item_screen.dart';
+import 'constants/constants.dart';
+import 'screens/item_screen.dart';
 
 // Entry point of the application
 void main() {
