@@ -12,9 +12,9 @@ void main() {
     expect(verticalPadding, defaultPadding / 2);
 
     // Test the background color
-    expect(backgroundColor, Color(0xFFF1EFF1));
+    expect(backgroundColor, const Color(0xFFF1EFF1));
 
     // Test the main color theme
-    expect(appMainColor, Color(0xff429689));
+    expect(appMainColor, const Color(0xff429689));
   });
 }

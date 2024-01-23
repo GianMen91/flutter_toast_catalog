@@ -19,7 +19,7 @@ void main() {
       await tester.pump();
 
       // Ensure loading indicator disappears after items are loaded
-      expect(find.byKey(Key('loadingIndicatorCenter')), findsOneWidget);
+      expect(find.byKey(const Key('loadingIndicatorCenter')), findsOneWidget);
     });
   });
 }
