@@ -8,6 +8,7 @@ import 'package:flutter_toast_catalog/src/widgets/item_card.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_toast_catalog/src/data/storage.dart';
 
+import 'constants/constants.dart';
 import 'data/item.dart';
 
 // Widget for managing and displaying a list of items
@@ -164,7 +165,7 @@ class _ItemManagerState extends State<ItemManager> {
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 20,
-              color: Color(0xFF1468b3),
+              color: appMainColor,
             ),
           ),
           content: SingleChildScrollView(
@@ -194,7 +195,7 @@ class _ItemManagerState extends State<ItemManager> {
           borderRadius: BorderRadius.circular(10.0),
         ),
         padding: const EdgeInsets.all(12.0),
-        primary: const Color(0xFF1468b3),
+        primary: appMainColor,
         onPrimary: Colors.white,
       ),
       onPressed: onPressed,
