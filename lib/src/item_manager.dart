@@ -176,8 +176,7 @@ class _ItemManagerState extends State<ItemManager> {
             ),
           ),
           actions: <Widget>[
-            _buildDialogButton('Close', () => Navigator.pop(context)),
-            _buildDialogButton('Retry', () {
+            _buildDialogButton('Retry', () async {
               Navigator.pop(context);
               onRetry();
             }),
