@@ -90,7 +90,7 @@ class _ItemManagerState extends State<ItemManager> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      key: Key('itemManagerRefreshIndicator'),
+      key: const Key('itemManagerRefreshIndicator'),
       onRefresh: _downloadItems,
       child: itemList != null
           ? _itemListView(itemList!)

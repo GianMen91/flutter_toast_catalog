@@ -68,6 +68,7 @@ class ItemCard extends StatelessWidget {
                       ),
                       child: Text(
                         itemDisplayName.trim(),
+                        key: const Key("item_name_text"),
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -82,6 +83,7 @@ class ItemCard extends StatelessWidget {
                       ),
                       child: Text(
                         "Last Sold: $formattedLastSold",
+                        key: const Key("item_last_sold_text"),
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
@@ -93,6 +95,7 @@ class ItemCard extends StatelessWidget {
                       ),
                       child: Text(
                         "Price: ${item.price} €",
+                        key: const Key("item_price_text"),
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
