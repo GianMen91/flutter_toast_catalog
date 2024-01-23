@@ -139,7 +139,6 @@ class _ItemManagerState extends State<ItemManager> {
       _showErrorDialog(
         'Error',
         'Impossible to download the items from the server.\nCheck your internet connection and retry!',
-        _downloadItems,
       );
     }
   }
@@ -154,7 +153,7 @@ class _ItemManagerState extends State<ItemManager> {
 
   // Show an error dialog with options for close and retry
   Future<void> _showErrorDialog(
-      String title, String content, VoidCallback onRetry) async {
+      String title, String content) async {
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -175,10 +174,12 @@ class _ItemManagerState extends State<ItemManager> {
               ],
             ),
           ),
-          actions: <Widget>[
+          actions: [
+            if (itemList != null)
+              _buildDialogButton('Close', () => Navigator.pop(context)),
             _buildDialogButton('Retry', () async {
               Navigator.pop(context);
-              onRetry();
+             await  _downloadItems();
             }),
           ],
         );
