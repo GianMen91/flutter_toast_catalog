@@ -36,6 +36,6 @@ Welcome to Toast Catalog, a Flutter app designed for managing and displaying a d
 
 The app is designed to work seamlessly across various screen sizes, providing a consistent and enjoyable experience on both small and large devices.
 
-# API Connection
+## API Connection
 Toast Catalog connects seamlessly to an external API to fetch real-time data, ensuring that users have access to the latest information.
 
