@@ -25,6 +25,17 @@ class ItemCard extends StatelessWidget {
     // Display name of the item
     var itemDisplayName = item.name;
 
+    String price;
+
+    // Check if the currency is "EUR"
+    if (item.currency == "EUR") {
+      // If the currency is "EUR", append "€" to the price
+      price = '${item.price} €';
+    } else {
+      // If the currency is not "EUR", append the currency to the price
+      price = '${item.price} ${item.currency}';
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: horizontalPadding,
@@ -94,7 +105,7 @@ class ItemCard extends StatelessWidget {
                         vertical: verticalPadding,
                       ),
                       child: Text(
-                        "Price: ${item.price} €",
+                        "Price: ${price}",
                         key: const Key("item_price_text"),
                         style: Theme.of(context).textTheme.button,
                       ),
