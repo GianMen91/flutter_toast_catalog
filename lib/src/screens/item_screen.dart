@@ -70,6 +70,7 @@ class _ItemScreenState extends State<ItemScreen> {
       title: const Text(
         'Toast Catalog',
         style: TextStyle(
+          color: Colors.white,
           fontFamily: 'Niconne',
           fontSize: 32,
         ),
@@ -85,6 +86,7 @@ class _ItemScreenState extends State<ItemScreen> {
   IconButton buildSortingMenuButtons() {
     return IconButton(
       icon: const Icon(Icons.sort_by_alpha_rounded,
+          color: Colors.white,
           key: Key("sort_by_alpha_rounded_icon")
       ),
       onPressed: () {
