@@ -122,7 +122,7 @@ class _ItemManagerState extends State<ItemManager> {
 
   // Download items from the API
   Future<void> _downloadItems() async {
-    const url = 'https://mocki.io/v1/fa5a29bd-623f-45d0-b2c9-04410875ca7b';
+    const url = 'https://gist.githubusercontent.com/GianMen91/0f93444fade28f5755479464945a7ad1/raw/f7ad7a60b2cff021ecf6cf097add060b39a1742b/toast_list.json';
 
     try {
       http.Response response = await http.get(Uri.parse(url));
@@ -179,7 +179,7 @@ class _ItemManagerState extends State<ItemManager> {
               _buildDialogButton('Close', () => Navigator.pop(context)),
             _buildDialogButton('Retry', () async {
               Navigator.pop(context);
-             await  _downloadItems();
+              await  _downloadItems();
             }),
           ],
         );
@@ -191,12 +191,10 @@ class _ItemManagerState extends State<ItemManager> {
   ElevatedButton _buildDialogButton(String label, VoidCallback onPressed) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
+        foregroundColor: Colors.white, backgroundColor: appMainColor, shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
         padding: const EdgeInsets.all(12.0),
-        primary: appMainColor,
-        onPrimary: Colors.white,
       ),
       onPressed: onPressed,
       child: Text(label, style: const TextStyle(fontSize: 15)),
@@ -205,8 +203,9 @@ class _ItemManagerState extends State<ItemManager> {
 
   // Convert JSON response to a list of Item objects
   List<Item> _getListFromData(String response) {
-    final List<dynamic> responseData = json.decode(response);
-    return responseData.map((item) => Item.fromJson(item)).toList();
+    final Map<String, dynamic> responseData = json.decode(response);
+    final List<dynamic> items = responseData['items'];
+    return items.map((item) => Item.fromJson(item)).toList();
   }
 
   // Build a ListView of items based on search and sort criteria
@@ -215,10 +214,10 @@ class _ItemManagerState extends State<ItemManager> {
 
     filteredItems = _currentSearchedValue != ''
         ? filteredItems
-            .where((item) => item.name
-                .toLowerCase()
-                .contains(_currentSearchedValue.toLowerCase()))
-            .toList()
+        .where((item) => item.name
+        .toLowerCase()
+        .contains(_currentSearchedValue.toLowerCase()))
+        .toList()
         : filteredItems;
 
     if (filteredItems.isNotEmpty) {
