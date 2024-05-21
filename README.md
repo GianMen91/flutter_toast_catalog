@@ -14,7 +14,7 @@ Welcome to Toast Catalog, a Flutter app designed for managing and displaying a d
 - **Sorting Options**: Sort items by name, last sold date, or price.
 - **Search Functionality**: Quickly find items using the search box.
 - **Offline Support**: Items are stored locally for seamless offline access.
-- **API Integration**: Connects to an external API (https://mocki.io/v1/fa5a29bd-623f-45d0-b2c9-04410875ca7b) to fetch the latest item data.
+- **API Integration**: Connects to an external API to fetch the latest item data.
 - **Connection Status Check**: Dynamically assesses internet connectivity, providing an error notification if unable to connect to the server.
 - **Fallback to Offline Mode**: In the absence of a connection, the app intelligently switches to displaying items from the offline list.
 - **Pull-to-Refresh**: Update the item list by pulling down on the screen.
