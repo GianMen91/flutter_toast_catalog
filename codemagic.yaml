@@ -6,6 +6,8 @@ workflows:
     environment:
       android_signing:
         - keystore_reference
+      groups:
+        - google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS)
       vars:
         PACKAGE_NAME: "com.example.flutter_toast_catalog"
         GOOGLE_PLAY_TRACK: "alpha"
