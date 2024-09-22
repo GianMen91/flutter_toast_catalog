@@ -24,6 +24,14 @@ workflows:
     artifacts:
       - build/**/outputs/**/*.apk
       - flutter_drive.log
+    cache:
+      # Cache Flutter dependencies and Gradle cache for incremental builds
+      paths:
+        - $HOME/.pub-cache
+        - $HOME/programs/flutter/.pub-cache
+        - $HOME/.gradle
+        - build/**/intermediates
+        - build/**/outputs
   ios-workflow:
     name: iOS Workflow
     instance_type: mac_mini_m2
@@ -67,6 +75,15 @@ workflows:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - flutter_drive.log
+    cache:
+      # Cache Flutter, CocoaPods, and derived data for incremental builds
+      paths:
+        - $HOME/.pub-cache
+        - $HOME/programs/flutter/.pub-cache
+        - ios/.symlinks
+        - ios/Pods
+        - ios/Flutter/Flutter.framework
+        - build/ios
     publishing:
       # See the following link for details about email publishing - https://docs.codemagic.io/publishing-yaml/distribution/#email
       email:
