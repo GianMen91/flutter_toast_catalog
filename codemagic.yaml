@@ -6,7 +6,7 @@ workflows:
     environment:
       vars:
         PACKAGE_NAME: "com.example.flutter_toast_catalog"
-      flutter: stable
+      flutter: "3.19.6"
     scripts:
       - name: Set up local.properties
         script: |
