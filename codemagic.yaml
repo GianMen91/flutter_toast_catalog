@@ -24,14 +24,7 @@ workflows:
     artifacts:
       - build/**/outputs/**/*.apk
       - flutter_drive.log
-    cache:
-      # Cache Flutter dependencies and Gradle cache for incremental builds
-      paths:
-        - $HOME/.pub-cache
-        - $HOME/programs/flutter/.pub-cache
-        - $HOME/.gradle
-        - build/**/intermediates
-        - build/**/outputs
+
   ios-workflow:
     name: iOS Workflow
     instance_type: mac_mini_m2
@@ -45,7 +38,7 @@ workflows:
       vars:
         APP_ID: 1111111111 # <-- Put your APP ID here
       flutter: stable
-      xcode: latest # <-- set to specific version e.g. 14.3, 15.0 to avoid unexpected updates.
+      xcode: latest
       cocoapods: default
     scripts:
       - name: Set up code signing settings on Xcode project
@@ -66,7 +59,6 @@ workflows:
         ignore_failure: true
       - name: Flutter build ipa and automatic versioning
         script: |
-          # See the following link about getting the latest App Store or TestFlight version - https://docs.codemagic.io/knowledge-codemagic/build-versioning/#app-store-or-testflight-latest-build-number
           flutter build ipa --release \
             --build-name=1.0.0 \
             --build-number=$(($(app-store-connect get-latest-testflight-build-number "$APP_ID") + 1)) \
@@ -75,42 +67,19 @@ workflows:
       - build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
       - flutter_drive.log
-    cache:
-      # Cache Flutter, CocoaPods, and derived data for incremental builds
-      paths:
-        - $HOME/.pub-cache
-        - $HOME/programs/flutter/.pub-cache
-        - ios/.symlinks
-        - ios/Pods
-        - ios/Flutter/Flutter.framework
-        - build/ios
-    publishing:
-      # See the following link for details about email publishing - https://docs.codemagic.io/publishing-yaml/distribution/#email
-      email:
-        recipients:
-          - giancarlo.mennillo@gmail.com
-        notify:
-          success: true # To receive a notification when a build succeeds
-          failure: false # To not receive a notification when a build fails
-      slack:
-        # See the following link about how to connect your Slack account - https://docs.codemagic.io/publishing-yaml/distribution/#slack
-        channel: "#builds"
-        notify_on_build_start: true # To receive a notification when a build starts
-        notify:
-          success: true # To receive a notification when a build succeeds
-          failure: false # To not receive a notification when a build fails
-      app_store_connect:
-        auth: integration
-        
-        # Configuration related to TestFlight (optional)
-        # Note: This action is performed during post-processing.
-        submit_to_testflight: true
-        beta_groups: # Specify the names of beta tester groups that will get access to the build once it has passed beta review.
-          - group name 1
-          - group name 2
 
-        # Configuration related to App Store (optional)
-        # Note: This action is performed during post-processing.
-        submit_to_app_store: false
-
-
+cache:
+  # Cache Flutter dependencies and Gradle cache for Android
+  cache_paths:
+    - $HOME/.pub-cache
+    - $HOME/.gradle
+    - build/**/intermediates
+    - build/**/outputs
+    
+  # Cache Flutter, CocoaPods, and derived data for iOS
+  ios_cache_paths:
+    - $HOME/.pub-cache
+    - ios/.symlinks
+    - ios/Pods
+    - ios/Flutter/Flutter.framework
+    - build/ios
