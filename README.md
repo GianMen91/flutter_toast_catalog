@@ -2,6 +2,7 @@
 
 ## Overview
 Welcome to Toast Catalog, a Flutter app designed for managing and displaying a dynamic list of items sourced from an external API. This app empowers users to explore, sort, and search for items in an intuitive and user-friendly interface.
+CI/CD with Codemagic.
 
 ## Screenshots
 
