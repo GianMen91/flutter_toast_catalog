@@ -4,11 +4,8 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 120
     environment:
-      android_signing:
-        - keystore_reference
       vars:
         PACKAGE_NAME: "com.example.flutter_toast_catalog"
-        GOOGLE_PLAY_TRACK: "alpha"
       flutter: stable
     scripts:
       - name: Set up local.properties
@@ -24,23 +21,12 @@ workflows:
         script: |
           flutter test
         ignore_failure: true
-      - name: Build AAB with Flutter
+      - name: Build APK with Flutter (Debug)
         script: |
-          BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME" --tracks="$GOOGLE_PLAY_TRACK") + 1))      
-          flutter build appbundle --release \
-            --build-name=1.0.$BUILD_NUMBER \
-            --build-number=$BUILD_NUMBER
+          flutter build apk --debug
     artifacts:
-      - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
+      - build/**/outputs/**/*.apk
       - flutter_drive.log
-    publishing:
-      email:
-        recipients:
-          - giancarlo.mennillo@gmail.com
-        notify:
-          success: true
-          failure: false
   ios-workflow:
     name: iOS Workflow
     instance_type: mac_mini_m2
