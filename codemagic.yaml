@@ -6,8 +6,6 @@ workflows:
     environment:
       android_signing:
         - keystore_reference
-      groups:
-        - google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS)
       vars:
         PACKAGE_NAME: "com.example.flutter_toast_catalog"
         GOOGLE_PLAY_TRACK: "alpha"
@@ -43,10 +41,6 @@ workflows:
         notify:
           success: true
           failure: false
-      google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        track: $GOOGLE_PLAY_TRACK
-        submit_as_draft: true
   ios-workflow:
     name: iOS Workflow
     instance_type: mac_mini_m2
